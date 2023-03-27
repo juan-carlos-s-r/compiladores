@@ -36,7 +36,3 @@ class TipoToken(object):
         'verdadero':'verdadero',
         'var':'var',
         'mientras':'mientras'}
-
-token="var"
-
-print(TipoToken.reservadas[token])
