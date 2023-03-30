@@ -2,29 +2,24 @@ class Token:
 
     tokens=[]
 
+    #genera el token de las variables y los numeros
     def generar_1(self,tipo,cadena,literal):
         self.cadena=cadena
         self.tipo=tipo
         self.literal=literal
         
+        #guarda los tokens generados en una lista para posteriormente imprimirlos
         token=Token
-        valor=self.tipo+","+self.cadena+","+self.literal
+        valor=self.tipo+"--"+self.cadena+"--"+self.literal
         token.tokens.append(valor)
-    
+        
+        
+    #genera la variable de tipo reservado
     def generar_2(self,tipo,cadena):
         self.tipo=tipo
         self.cadena=cadena
         
+        #guarda los tokens generados en una lista para posteriormente imprimirlos
         token=Token
-        valor=self.tipo+","+self.cadena
+        valor=self.tipo+"--"+self.cadena
         token.tokens.append(valor)
-
-token=Token()
-cadena='var'
-tipo='var'
-literal='var'
-
-token.generar_2(tipo,cadena)          
-print(Token.tokens)
-token.generar_1('izquierdo','derecho','derecho')
-print(Token.tokens)
