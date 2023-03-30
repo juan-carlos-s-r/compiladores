@@ -1,3 +1,5 @@
+from Token import *
+
 class TipoToken:
 
     signos={'(':'parentesis izquierdo',
@@ -38,11 +40,10 @@ class TipoToken:
         'mientras':'mientras'}
 
     def esta(self,cadena):
-        print("hola")
         self.cadena=cadena
         if cadena in TipoToken.reservadas:
             print("cadena en reservadas",self.cadena)
         elif cadena in TipoToken.signos:
             print("cadena en signos",self.cadena)
         else:
-            print("la cadena no esta")
+            print("la cadena es un id",self.cadena)
