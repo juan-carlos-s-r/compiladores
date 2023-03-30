@@ -8,22 +8,23 @@ class Token:
         self.literal=literal
         
         token=Token
-
-        token.tokens.add(self.tipo," ",self.cadena," ",self.literal)
+        valor=self.tipo+","+self.cadena+","+self.literal
+        token.tokens.append(valor)
     
     def generar_2(self,tipo,cadena):
         self.tipo=tipo
         self.cadena=cadena
         
         token=Token
+        valor=self.tipo+","+self.cadena
+        token.tokens.append(valor)
 
-        token.tokens.add(self.tipo," ",self.cadena)
-
-token=Token
+token=Token()
 cadena='var'
 tipo='var'
+literal='var'
 
-token.generar_2('var','var')       
+token.generar_2(tipo,cadena)          
 print(Token.tokens)
-
-
+token.generar_1('izquierdo','derecho','derecho')
+print(Token.tokens)
