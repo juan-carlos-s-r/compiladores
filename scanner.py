@@ -23,16 +23,17 @@ def palabra(i): #funcion donde se guardan los estados del automata para las pala
             global i_lexema
             global flotante
             if estado==9:
-                if i in alfabeto:
+                if cadena[i] in alfabeto:
                     estado=10
                     f_lexema+=1
                 else:
                     estado=12
                     numeros(i)
             elif estado==10:
-                if i in alfabeto or i in digitos:
+                if cadena[i] in alfabeto or cadena[i] in digitos:
                     estado=10
                     f_lexema+=1
+                    print(i,'b')
                 else:
                     estado=11
                     palabra(i)
@@ -41,13 +42,14 @@ def palabra(i): #funcion donde se guardan los estados del automata para las pala
                 buscar.esta(cadena[i_lexema:f_lexema],flotante)
                 i_lexema=f_lexema
                 estado=0
+                
 def numeros(i): #funcion donde se guardan los estados del automata de numeros
     global estado
     global f_lexema
     global i_lexema
     global flotante
     if estado==12:
-        if i in digitos:
+        if cadena[i] in digitos:
             estado=13
             f_lexema+=1
             
@@ -55,99 +57,111 @@ def numeros(i): #funcion donde se guardan los estados del automata de numeros
         else:
             estado=22    
     elif estado==13:
-        if i in digitos:
+        if cadena[i] in digitos:
             estado=13
             f_lexema+=1
-        elif i ==".":
+        elif cadena[i] ==".":
             estado=14
             f_lexema+=1
             flotante=False
-        elif i =="E":
+        elif cadena[i] =="E":
             estado=16
             f_lexema+=1
             flotante=True
         else:
             estado=20
-            if i ==" ":
+            if cadena[i] ==" ":
                 numeros(i)
     elif estado==14:
-        if i in digitos:
+        if cadena[i] in digitos:
             estado=15
             f_lexema+=1    
     elif estado==15:
-        if i in digitos:
+        if cadena[i] in digitos:
             estado=15
             f_lexema+=1
-        elif i =="E":
+        elif cadena[i] =="E":
             estado=16
             f_lexema+=1
         else:
             estado=21
-            if i ==" ":
+            if cadena[i] ==" ":
                 numeros(i)
     elif estado==16:
-        if i in digitos:
+        if cadena[i] in digitos:
             estado=18
             f_lexema+=1
-        elif i =="+" or i=="-":
+        elif cadena[i] =="+" or cadena[i]=="-":
             estado=17  
             f_lexema+=1  
     elif estado==17:
-        if i in digitos:
+        if cadena[i] in digitos:
             estado=18
             f_lexema+=1
     elif estado==18:
-        if i in digitos:
+        if cadena[i] in digitos:
             estado=18
             f_lexema+=1
             
         else:
             estado=19
-            if i ==" ":
+            if cadena[i] ==" ":
                 numeros(i)
-    elif estado==19:#estado final
+    elif estado==19:#estado final con *
         buscar=TipoToken()
         buscar.esta(cadena[i_lexema:f_lexema],flotante)
         i_lexema=f_lexema
         estado=0
-    elif estado==20:#estado final
+        
+    elif estado==20:#estado final con *
         flotante=True
         buscar=TipoToken()
         buscar.esta(cadena[i_lexema:f_lexema],flotante)
         print(cadena[i_lexema:f_lexema])
         i_lexema=f_lexema
         estado=0
-    elif estado==21:#estado final
+        
+    elif estado==21:#estado final con *
         buscar=TipoToken()
         buscar.esta(cadena[i_lexema:f_lexema],flotante)
         i_lexema=f_lexema
-        estado=0  
-
-for i in cadena+" ": #for donde se hace el bucle para recorrer la cadena y dar inicio al automata
+        estado=0
+        
+def signos(i):
+    global estado
+    global f_lexema
+    global i_lexema
+    global flotante
     if estado==0:
-        if i =='<':
+        if cadena[i] =='<':
+            print(i,'estado 1')
             estado=1
             f_lexema+=1
-        elif i == '=':
+        elif cadena[i] == '=':
+            print(i,'estado 2')
+            print(i,'c')
             estado=5
             f_lexema+=1
-        elif i == '>':
+            signos(i)
+        elif cadena[i] == '>':
+            print(i,'estado 3')
             estado=6
             f_lexema+=1
-        elif i in sig:
+        elif cadena[i] in sig:
+            print(i,'estado 4')
             buscar=TipoToken()
-            buscar.esta(i)
+            buscar.esta(i,flotante)
             i_lexema=f_lexema
             estado=0
         else:
+            print(i,'estado 5')
             estado=9
-            f_lexema+=1
             palabra(i)
     elif estado==1:
-        if i =='=':
+        if cadena[i] =='=':
             estado=2
             f_lexema+=1
-        elif i == '>':
+        elif cadena[i] == '>':
             estado=3
             f_lexema+=1
         else:
@@ -178,7 +192,7 @@ for i in cadena+" ": #for donde se hace el bucle para recorrer la cadena y dar i
         i_lexema=f_lexema
         estado=0
     elif estado==6:
-        if i =='=':
+        if cadena[i] =='=':
             estado=7
             f_lexema+=1
         else:
@@ -193,17 +207,18 @@ for i in cadena+" ": #for donde se hace el bucle para recorrer la cadena y dar i
         buscar.esta(cadena[i_lexema:f_lexema],flotante)
         i_lexema=f_lexema
         estado=0  
-    elif estado==9 or estado==10 or estado==11: #estados para llamar a las funciones
-        palabra(i)
-    elif estado==12 or estado==13 or estado==14 or estado==15 or estado==16 or estado==18 or estado==17 or estado==19 or estado==20 or estado==21: #estados para llamar a las funciones
-        numeros(i) 
-    #inicio del automata para detectar espacios en blanco
-    elif estado==22:
-        if i==" ":
+        
+def espacios(i):
+    global estado
+    global f_lexema
+    global i_lexema
+    global flotante
+    if estado==22:
+        if cadena[i]==" ":
             estado=23
             f_lexema+=1
     elif estado==23:
-        if i==" ":
+        if cadena[i]==" ":
             estado=23
             f_lexema+=1
         else:
@@ -213,6 +228,19 @@ for i in cadena+" ": #for donde se hace el bucle para recorrer la cadena y dar i
         buscar.esta(cadena[i_lexema:f_lexema],flotante)
         i_lexema=f_lexema
         estado=0
+
+print(len(cadena))
+for i in range(len(cadena)): #for donde se hace el bucle para recorrer la cadena y dar inicio al automata
+    if estado==0 or estado==1 or estado==2 or estado==3 or estado==4 or estado==5 or estado==6 or estado==7 or estado==8:
+        print(i,'a')
+        signos(i)
+    elif estado==9 or estado==10 or estado==11: #estados para llamar a las funciones
+        palabra(i)
+    elif estado==12 or estado==13 or estado==14 or estado==15 or estado==16 or estado==18 or estado==17 or estado==19 or estado==20 or estado==21: #estados para llamar a las funciones
+        numeros(i) 
+    #inicio del automata para detectar espacios en blanco
+    elif estado==22 or estado==23 or estado==24:
+        espacios(i)
     
 
 print(Token.tokens) #impresion de tokens

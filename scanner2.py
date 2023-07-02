@@ -1,12 +1,15 @@
 from TipoToken import * #importaciones de las classes
 from Token import *
 
-sig=('(',')','{','}',"'",'.',';','-','+','*','/','!','!=','=','==','<','<=','>','>=')
+sig=('(',')','{','}',"'",'.',';','-','+','*','!','!=','=','==','<','<=','>','>=')
 alfabeto=('a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z')
 digitos=('0','1','2','3','4','5','6','7','8','9')
-
-cadena=input()
+cadena=""
+with open('archivo.txt', 'r') as archivo:  #Esta parte lee el archivo txt y lo guarda en la variable cadena para su uso posterior
+    cadena = archivo.read()
+#cadena=input(">>")
 cadena+=" "
+
 a=0
 estado=0  #estado del automata estado cero como inicial
 i_lexema=0     #inicio del lexema para llevar un contro de donde empieza
@@ -39,6 +42,10 @@ def signos():
             estado=4
             f_lexema+=1
             a+=1
+        elif cadena[a]=="/":
+            estado=25
+            f_lexema+=1
+            a+=1
         else:
             estado=9
             palabra()
@@ -46,28 +53,28 @@ def signos():
         if cadena[a] =='=':
             estado=2
             f_lexema+=1
-            a+=1
+            
         elif cadena[a] == '>':
             estado=3
             f_lexema+=1
-            a+=1
+            
         else:
             estado=4
     elif estado==2:#estado final
         buscar=TipoToken()
-        buscar.esta(cadena[i_lexema:f_lexema],flotante)
+        buscar.esta(cadena[i_lexema:f_lexema])
         i_lexema=f_lexema
         estado=0
         a+=1
     elif estado==3:#estado final
         buscar=TipoToken()
-        buscar.esta(cadena[i_lexema:f_lexema],flotante)
+        buscar.esta(cadena[i_lexema:f_lexema])
         i_lexema=f_lexema
         estado=0
         a+=1
     elif estado==4:#estado final con asterisco
         buscar=TipoToken()
-        buscar.esta(cadena[i_lexema:f_lexema],flotante)
+        buscar.esta(cadena[i_lexema:f_lexema])
         i_lexema=f_lexema
         estado=0
         
@@ -78,32 +85,31 @@ def signos():
             a+=1
         else:
             buscar=TipoToken()
-            buscar.esta(cadena[i_lexema:f_lexema],flotante)
+            buscar.esta(cadena[i_lexema:f_lexema])
             i_lexema=f_lexema
             estado=0
-            a+=1
     elif estado==5.5:#estadado final 
         buscar=TipoToken()
-        buscar.esta(cadena[i_lexema:f_lexema],flotante)
+        buscar.esta(cadena[i_lexema:f_lexema])
         i_lexema=f_lexema
         estado=0
-        a+=1
+        
     elif estado==6:
         if cadena[a] =='=':
             estado=7
             f_lexema+=1
-            a+=1
+            
         else:
             estado=8
     elif estado==7:#estadado final 
         buscar=TipoToken()
-        buscar.esta(cadena[i_lexema:f_lexema],flotante)
+        buscar.esta(cadena[i_lexema:f_lexema])
         i_lexema=f_lexema
         estado=0
         a+=1
     elif estado==8:#estado final 
         buscar=TipoToken()
-        buscar.esta(cadena[i_lexema:f_lexema],flotante)
+        buscar.esta(cadena[i_lexema:f_lexema])
         i_lexema=f_lexema
         estado=0
 
@@ -129,7 +135,7 @@ def palabra():
             estado=11
     elif estado==11:#estado final
         buscar=TipoToken()
-        buscar.esta(cadena[i_lexema:f_lexema],flotante)
+        buscar.esta(cadena[i_lexema:f_lexema])
         i_lexema=f_lexema
         estado=0
 
@@ -211,21 +217,20 @@ def numeros():
                 numeros()
     elif estado==19:#estado final con *
         buscar=TipoToken()
-        buscar.esta(cadena[i_lexema:f_lexema],flotante)
+        buscar.esta(cadena[i_lexema:f_lexema])
         i_lexema=f_lexema
         estado=0
         
     elif estado==20:#estado final con *
         flotante=True
         buscar=TipoToken()
-        buscar.esta(cadena[i_lexema:f_lexema],flotante)
-        print(cadena[i_lexema:f_lexema],"hola")
+        buscar.esta(cadena[i_lexema:f_lexema])
         i_lexema=f_lexema
         estado=0
         
     elif estado==21:#estado final con *
         buscar=TipoToken()
-        buscar.esta(cadena[i_lexema:f_lexema],flotante)
+        buscar.esta(cadena[i_lexema:f_lexema])
         i_lexema=f_lexema
         estado=0
 
@@ -235,7 +240,7 @@ def espacios():
     global f_lexema
     global a
     if estado==22:
-        if cadena[a]==" ":
+        if cadena[a]==" " or '\n':
             estado=23
             f_lexema+=1
             a+=1
@@ -247,11 +252,64 @@ def espacios():
         else:
             estado=24
     elif estado==24:#estado final
-        buscar=TipoToken()
-        buscar.esta(cadena[i_lexema:f_lexema],flotante)
+        
         i_lexema=f_lexema
         estado=0
 
+def comentarios():
+    global i_lexema
+    global estado
+    global f_lexema
+    global a
+
+    if estado==25:
+        if cadena[a]=="/":
+            estado=26
+            f_lexema+=1
+            a+=1
+            comentarios()
+        elif cadena[a]=="*":
+            estado=27
+            f_lexema+=1
+            a+=1
+            comentarios()
+        else:
+            buscar=TipoToken()
+            buscar.esta(cadena[i_lexema:f_lexema])
+            i_lexema=f_lexema
+            estado=0
+    elif estado==26:
+        if cadena[a]=='\n':
+            i_lexema=f_lexema
+            estado=0
+        else:
+            estado=26
+            f_lexema+=1
+            a+=1
+            comentarios()
+    elif estado==27:
+        if cadena[a]=='*':
+            estado=28
+            f_lexema+=1
+            a+=1
+            comentarios()
+        else:
+            estado=27
+            f_lexema+=1
+            a+=1
+            comentarios()
+    elif estado==28:
+        if cadena[a]=='/':
+            estado=0
+            f_lexema+=1
+            a+=1
+            i_lexema=f_lexema
+            
+        else:
+            estado=27
+            f_lexema+=1
+            a+=1
+            comentarios()
 
 while(cerrar!=True):
     if a!=len(cadena):
@@ -264,15 +322,8 @@ while(cerrar!=True):
         #inicio del automata para detectar espacios en blanco
         elif estado==22 or estado==23 or estado==24:
             espacios()
+        elif estado==25:
+            comentarios()
     else:
-        print(Token.tokens) #impresion de tokens
-        seleccion=input("continuar: ")
-        if (seleccion=="1"):
-            print("va")
-            a=0
-            cadena=""
-            cadena=input()
-            print(cadena)
-        else:
-            print("cerrar")
-            cerrar=True
+        print(Token.tokens,len(Token.tokens),Token.tokens[0][1])
+        cerrar=True

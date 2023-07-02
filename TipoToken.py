@@ -48,9 +48,9 @@ class TipoToken:
         'while':'while'}
 
     #funcion donde se busca si esta en signos o en palabras resevadas para posteriormente generar el token a esta funcion le llega cadena que en realidad es el lexema y flotante solo para verficar el numero
-    def esta(self,cadena,flotante):
+    def esta(self,cadena):
         self.cadena=cadena
-        self.flotante=flotante
+        
         
         #se verifica si esta en reservadas de ser asi manda 2 parametros 
         if cadena in TipoToken.reservadas:
@@ -63,19 +63,14 @@ class TipoToken:
             token.generar_2('<'+TipoToken.signos[cadena],cadena+'>')
             
         #se verifica si empieza con una letra del alfabeto de ser asi como ya sabemos del automata es una cadena y envia 3 parametos 
-        elif cadena in alfabeto:
+        elif cadena[0] in alfabeto:
             token=Token()
-            token.generar_1("<'cadena'",cadena,cadena[0:len(cadena)]+'>')
+            token.generar_1("<'id'",cadena,cadena[0:len(cadena)]+'>')
             
         #se verifica si empieza con un digito de ser asi como ya sabemos del automata es una numero y envia 3 parametos solamente se verifica si es entero o flotante
-        elif cadena in digitos:
-            if flotante==True:
-                token=Token()
-                token.generar_1("'entero'",cadena,cadena[0:len(cadena)]+'>')
-                
-            else:
-                token=Token()
-                token.generar_1("'flotante'",cadena,cadena[0:len(cadena)]+'>')
+        elif cadena[0] in digitos:
+            token=Token()
+            token.generar_1("'entero'",cadena,cadena[0:len(cadena)]+'>')
         else:
             print("Error lexico",cadena)
                 
