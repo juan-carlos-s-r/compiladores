@@ -55,22 +55,22 @@ class TipoToken:
         #se verifica si esta en reservadas de ser asi manda 2 parametros 
         if cadena in TipoToken.reservadas:
             token=Token()
-            token.generar_2('<'+TipoToken.reservadas[cadena],cadena+'>')
+            token.generar_2(TipoToken.reservadas[cadena],cadena)
             
         #se verifica si esta en signos de ser asi manda 2 parametros 
         elif cadena in TipoToken.signos:
             token=Token()
-            token.generar_2('<'+TipoToken.signos[cadena],cadena+'>')
+            token.generar_2(TipoToken.signos[cadena],cadena)
             
         #se verifica si empieza con una letra del alfabeto de ser asi como ya sabemos del automata es una cadena y envia 3 parametos 
         elif cadena[0] in alfabeto:
             token=Token()
-            token.generar_1("<'id'",cadena,cadena[0:len(cadena)]+'>')
+            token.generar_1('id',cadena,cadena[0:len(cadena)])
             
         #se verifica si empieza con un digito de ser asi como ya sabemos del automata es una numero y envia 3 parametos solamente se verifica si es entero o flotante
         elif cadena[0] in digitos:
             token=Token()
-            token.generar_1("'entero'",cadena,cadena[0:len(cadena)]+'>')
+            token.generar_1('id',cadena,cadena[0:len(cadena)])
         else:
             print("Error lexico",cadena)
                 

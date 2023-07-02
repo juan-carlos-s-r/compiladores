@@ -1,3 +1,5 @@
+
+
 class Token:
 
     tokens=[]
@@ -10,8 +12,8 @@ class Token:
         
         #guarda los tokens generados en una lista para posteriormente imprimirlos
         token=Token
-        valor=self.tipo+"--"+self.cadena+"--"+self.literal
-        token.tokens.append(valor)
+        valor=self.tipo,self.cadena,self.literal
+        token.tokens.append([valor])
         
         
     #genera la variable de tipo reservado
@@ -21,5 +23,5 @@ class Token:
         
         #guarda los tokens generados en una lista para posteriormente imprimirlos
         token=Token
-        valor=self.tipo+"--"+self.cadena
-        token.tokens.append(valor)
+        valor=self.tipo,self.cadena
+        token.tokens.append([valor])
